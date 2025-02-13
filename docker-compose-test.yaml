@@ -1,0 +1,25 @@
+services:
+  testapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # Set to "release" so it doesn't spam debug messages
+      GIN_MODE: release
+    depends_on:
+      - testdb
+
+  testdb:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local
