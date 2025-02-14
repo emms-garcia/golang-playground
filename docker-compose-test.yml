@@ -2,24 +2,23 @@ services:
   testapp:
     build:
       context: .
-      dockerfile: Dockerfile
+      target: builder
+    command: go test -v ./...
+    container_name: golang_playground_testapp
     environment:
-      # Set to "release" so it doesn't spam debug messages
+      # Set to "release" to avoid spamming the console.
       GIN_MODE: release
     depends_on:
       - testdb
+    volumes:
+      - ./:/go/src/app
 
   testdb:
-    image: postgres:13
+    image: postgres:17
+    container_name: golang_playground_testdb
     environment:
       POSTGRES_DB: db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
-    driver: local

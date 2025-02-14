@@ -2,17 +2,17 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // ConfigureRoutes is a function to configure the routes of the API
-func ConfigureRoutes(db *gorm.DB) *gin.Engine {
+func ConfigureRoutes(app *App) *gin.Engine {
 	engine := gin.New()
 	engine.Use(gin.Recovery())
-	engine.GET("/ping", PingHandler)
-	engine.GET("/todos", ListHandler(db))
-	engine.POST("/todos", AddHandler(db))
-	engine.GET("/todos/:id", DetailHandler(db))
-	engine.DELETE("/todos/:id", DeleteHandler(db))
+	engine.GET("/ping", app.PingHandler)
+	engine.GET("/todos", app.ListHandler)
+	engine.POST("/todos", app.AddHandler)
+	engine.GET("/todos/:id", app.DetailHandler)
+	engine.PUT("/todos/:id", app.UpdateHandler)
+	engine.DELETE("/todos/:id", app.DeleteHandler)
 	return engine
 }

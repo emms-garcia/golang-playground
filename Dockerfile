@@ -1,4 +1,7 @@
-FROM golang:1.23.5 AS builder
+FROM golang:1.24.0-alpine3.21 AS builder
 WORKDIR /go/src/app
 COPY . .
-CMD ["go", "run", "."]
+
+FROM builder AS dev
+RUN go install github.com/air-verse/air@latest
+CMD ["air", "-c", ".air.toml"]

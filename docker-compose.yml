@@ -2,14 +2,17 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+    container_name: golang_playground_app
     ports:
       - "8080:8080"
     depends_on:
       - db
+    volumes:
+      - ./:/go/src/app
 
   db:
-    image: postgres:13
+    image: postgres:17
+    container_name: golang_playground_db
     environment:
       POSTGRES_DB: db
       POSTGRES_USER: postgres
