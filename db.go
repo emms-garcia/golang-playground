@@ -11,7 +11,7 @@ func ConfigureDB(configuration *Configuration) *gorm.DB {
 	if err != nil {
 		panic("failed to connect with db")
 	}
-	// TODO: this shoudl be in a migration file with something like golang-migrate
+	// TODO: this should be in a migration file with something like golang-migrate
 	db.AutoMigrate(&Todo{})
 	return db
 }
