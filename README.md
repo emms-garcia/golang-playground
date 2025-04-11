@@ -1,19 +1,11 @@
-# Golang Playground
+# golang-playground
 
-Repo to play with Golang using:
-- [Gin](https://github.com/gin-gonic/gin) (Web Framework)
-- [Air](https://github.com/air-verse/air) (Live Reload)
-- [GORM](https://github.com/go-gorm/gorm) (ORM)
-- [PostgreSQL](https://www.postgresql.org/)
+Portfolio with several projects using the [Go Programming Language](https://go.dev/).
 
-## Requirements
+## gin-api
 
-This repo uses [Docker](https://www.docker.com/) to create a standarized environment for development.
+REST API built with Gin + GORM
 
-## Development
+## discord-app
 
-Run `make run` to run the API in development mode.
-
-## Testing
-
-Run `make test` to run the test suite.
+Discord bot with support for several commands.

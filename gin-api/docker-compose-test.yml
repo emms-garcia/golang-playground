@@ -1,0 +1,24 @@
+services:
+  testapi:
+    build:
+      context: .
+      target: builder
+    command: go test -v ./...
+    container_name: gin_test_api
+    environment:
+      # Set to "release" to avoid spamming the console.
+      GIN_MODE: release
+    depends_on:
+      - testdb
+    volumes:
+      - ./:/go/src/app
+
+  testdb:
+    image: postgres:17
+    container_name: gin_test_api_db
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
