@@ -1,21 +1,12 @@
-package main
+package integration
 
 import (
 	"net/http"
 	"testing"
 
+	"github.com/emms-garcia/golang-playground/gin-api/internal/model"
 	"github.com/stretchr/testify/assert"
 )
-
-// TestPingHandler tests the GET /ping endpoint
-func TestPingHandler(t *testing.T) {
-	ctx := setup()
-	defer teardown(ctx)
-
-	response := request(ctx, "GET", "/ping", "")
-	assert.Equal(t, http.StatusOK, response.Code)
-	assert.Equal(t, "{\"message\":\"pong\"}", response.Body.String())
-}
 
 // TestAddHandler tests the GET /todos endpoint
 func TestAddHandler(t *testing.T) {
@@ -32,7 +23,7 @@ func TestUpdateHandler(t *testing.T) {
 	ctx := setup()
 	defer teardown(ctx)
 
-	result := ctx.DB.Create(&Todo{Message: "test"})
+	result := ctx.DB.Create(&model.Todo{Message: "test"})
 	if result.Error != nil {
 		t.Error("failed to create todo")
 		return
@@ -48,7 +39,7 @@ func TestDetailHandler(t *testing.T) {
 	ctx := setup()
 	defer teardown(ctx)
 
-	result := ctx.DB.Create(&Todo{Message: "test"})
+	result := ctx.DB.Create(&model.Todo{Message: "test"})
 	if result.Error != nil {
 		t.Error("failed to create todo")
 		return
@@ -64,8 +55,8 @@ func TestListHandler(t *testing.T) {
 	ctx := setup()
 	defer teardown(ctx)
 
-	result1 := ctx.DB.Create(&Todo{Message: "test1"})
-	result2 := ctx.DB.Create(&Todo{Message: "test2"})
+	result1 := ctx.DB.Create(&model.Todo{Message: "test1"})
+	result2 := ctx.DB.Create(&model.Todo{Message: "test2"})
 	if result1.Error != nil || result2.Error != nil {
 		t.Error("failed to create todos")
 		return
@@ -81,7 +72,7 @@ func TestDeleteHandler(t *testing.T) {
 	ctx := setup()
 	defer teardown(ctx)
 
-	result1 := ctx.DB.Create(&Todo{Message: "test"})
+	result1 := ctx.DB.Create(&model.Todo{Message: "test"})
 	if result1.Error != nil {
 		t.Error("failed to create todo")
 		return

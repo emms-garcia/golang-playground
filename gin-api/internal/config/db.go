@@ -1,6 +1,7 @@
-package main
+package config
 
 import (
+	"github.com/emms-garcia/golang-playground/gin-api/internal/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,6 @@ func ConfigureDB(configuration *Configuration) *gorm.DB {
 		panic("failed to connect with db")
 	}
 	// TODO: this should be in a migration file with something like golang-migrate
-	db.AutoMigrate(&Todo{})
+	db.AutoMigrate(&model.Todo{})
 	return db
 }

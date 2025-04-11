@@ -1,8 +1,10 @@
-package main
+package config
 
-import "fmt"
+import (
+	"fmt"
+)
 
-// Configuration is a struct to hold the configuration of the application.
+// Configuration is a struct to bundle configurations for the application.
 // TODO: this should be read from a config file
 type Configuration struct {
 	DBHost     string
