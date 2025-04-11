@@ -1,8 +1,3 @@
-// Runs a Discord bot that listens for a couple simple commands: "ping" and "gif".
-// Requires the following env variables:
-// - "DISCORD_BOT_TOKEN": Token generate for the bot.
-// - "ENVIRONMENT": Environment variable. Currently it just accepts "production" - any other value is assumed to be development.
-// - "GIPHY_API_KEY": API key for the Giphy API.
 package main
 
 import (
