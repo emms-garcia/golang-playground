@@ -2,18 +2,40 @@ package config
 
 import (
 	"fmt"
+
+	"github.com/spf13/viper"
 )
 
+var AppConfiguration Configuration
+
 // Configuration is a struct to bundle configurations for the application.
-// TODO: this should be read from a config file
 type Configuration struct {
-	DBHost     string
-	DBUser     string
-	DBPassword string
-	DBName     string
+	Server struct {
+		Port int
+	}
+
+	Database struct {
+		Host     string
+		Port     int
+		User     string
+		Password string
+		Name     string
+	}
+
+	Environment string
 }
 
-// BuildDBDSN is a method to build the DSN for the database connection
-func (c *Configuration) BuildDBDSN() string {
-	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable", c.DBHost, c.DBUser, c.DBPassword, c.DBName)
+// Load is a function to load the configuration from a file.
+// It uses viper to read the configuration file and unmarshal it into the Configuration struct.
+func Load(environment string) error {
+	path := fmt.Sprintf("%s/%s.yaml", GetConfigsPath(), environment)
+	viper.SetConfigFile(path)
+	viper.SetConfigType("yaml")
+	if err := viper.ReadInConfig(); err != nil {
+		return fmt.Errorf("read config: %w", err)
+	}
+	if err := viper.Unmarshal(&AppConfiguration); err != nil {
+		return fmt.Errorf("unmarshal config: %w", err)
+	}
+	return nil
 }

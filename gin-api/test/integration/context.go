@@ -7,6 +7,7 @@ import (
 
 	"github.com/emms-garcia/golang-playground/gin-api/internal/config"
 	"github.com/emms-garcia/golang-playground/gin-api/internal/handler"
+	"github.com/emms-garcia/golang-playground/gin-api/internal/logger"
 	"github.com/emms-garcia/golang-playground/gin-api/internal/repository"
 	"github.com/emms-garcia/golang-playground/gin-api/internal/router"
 	"github.com/emms-garcia/golang-playground/gin-api/internal/service"
@@ -20,7 +21,9 @@ type IntegrationTestContext struct {
 }
 
 func setup() *IntegrationTestContext {
-	db := config.ConfigureDB(&config.TestConfiguration)
+	config.Load(config.Test)
+	logger.Init(config.Test)
+	db := config.ConfigureDB(&config.AppConfiguration)
 	engine := router.Setup(&handler.Handler{
 		PingHandler: handler.NewPingHandler(),
 		TodoHandler: handler.NewTodoHandler(service.NewTodoService(repository.NewTodoRepository(db))),

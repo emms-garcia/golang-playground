@@ -6,6 +6,8 @@ services:
     command: go test -v ./...
     container_name: gin_test_api
     environment:
+      CONFIGS_PATH: /go/src/app/configs
+      ENVIRONMENT: test
       # Set to "release" to avoid spamming the console.
       GIN_MODE: release
     depends_on:

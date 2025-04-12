@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/emms-garcia/golang-playground/gin-api/internal/handler"
+	"github.com/emms-garcia/golang-playground/gin-api/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,6 +11,7 @@ func Setup(handler *handler.Handler) *gin.Engine {
 	engine := gin.New()
 	engine.Use(gin.Recovery())
 	engine.SetTrustedProxies(nil)
+	engine.Use(middleware.ZapLogger())
 
 	// ping API (healthcheck)
 	engine.GET("/ping", handler.PingHandler.Ping)

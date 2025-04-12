@@ -8,7 +8,11 @@ import (
 )
 
 func TestConfigureDB(t *testing.T) {
-	db := config.ConfigureDB(&config.TestConfiguration)
+	err := config.Load(config.Test)
+	if err != nil {
+		t.Errorf("failed to load config: %v", err)
+	}
+	db := config.ConfigureDB(&config.AppConfiguration)
 	var one int
 	result := db.Raw("SELECT 1").Scan(&one)
 	if result.Error != nil {
