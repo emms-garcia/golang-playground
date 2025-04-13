@@ -17,5 +17,6 @@ func ConfigureDB(config *Configuration) (*gorm.DB, error) {
 	}
 	// TODO: this should be in a migration file with something like golang-migrate
 	db.AutoMigrate(&model.Todo{})
+	db.AutoMigrate(&model.Url{})
 	return db, err
 }

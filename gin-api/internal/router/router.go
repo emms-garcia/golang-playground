@@ -20,6 +20,11 @@ func Setup(app *application.Application) *gin.Engine {
 	pingHandler := handler.NewPingHandler()
 	engine.GET("/ping", pingHandler.Ping)
 
+	// url-shortener API
+	urlHandler := handler.NewUrlHandler(service.NewUrlService(repository.NewUrlRepository(app.DB)))
+	engine.POST("/u/shorten", urlHandler.Shorten)
+	engine.GET("/u/:short", urlHandler.Redirect)
+
 	// todos API
 	todoHandler := handler.NewTodoHandler(service.NewTodoService(repository.NewTodoRepository(app.DB)))
 	engine.GET("/todos", todoHandler.List)
