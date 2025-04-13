@@ -9,10 +9,10 @@ import (
 
 // TestPingHandler tests the GET /ping endpoint
 func TestPingHandler(t *testing.T) {
-	ctx := setup()
-	defer teardown(ctx)
+	app := NewTestApplication()
+	defer app.Teardown()
 
-	response := request(ctx, "GET", "/ping", "")
+	response := app.Request("GET", "/ping", "")
 	assert.Equal(t, http.StatusOK, response.Code)
 	assert.Equal(t, "{\"message\":\"pong\"}", response.Body.String())
 }

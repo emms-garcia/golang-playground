@@ -3,16 +3,19 @@ package integration
 import (
 	"testing"
 
-	"github.com/emms-garcia/golang-playground/gin-api/internal/config"
+	"github.com/emms-garcia/golang-playground/gin-api/internal/configuration"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestConfigureDB(t *testing.T) {
-	err := config.Load(config.Test)
+	config, err := configuration.Load(configuration.Test)
 	if err != nil {
 		t.Errorf("failed to load config: %v", err)
 	}
-	db := config.ConfigureDB(&config.AppConfiguration)
+	db, err := configuration.ConfigureDB(config)
+	if err != nil {
+		t.Errorf("failed to load db: %v", err)
+	}
 	var one int
 	result := db.Raw("SELECT 1").Scan(&one)
 	if result.Error != nil {

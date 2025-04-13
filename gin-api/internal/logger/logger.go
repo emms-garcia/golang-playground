@@ -1,20 +1,14 @@
 package logger
 
 import (
-	"github.com/emms-garcia/golang-playground/gin-api/internal/config"
+	"github.com/emms-garcia/golang-playground/gin-api/internal/configuration"
 	"go.uber.org/zap"
 )
 
-var Log *zap.Logger
-
-func Init(env string) {
-	var err error
-	if env == config.Production {
-		Log, err = zap.NewProduction()
-	} else {
-		Log, err = zap.NewDevelopment()
+// Load initializes the logger based on the environment.
+func Load(env string) (*zap.Logger, error) {
+	if env == configuration.Production {
+		return zap.NewProduction()
 	}
-	if err != nil {
-		panic(err)
-	}
+	return zap.NewDevelopment()
 }

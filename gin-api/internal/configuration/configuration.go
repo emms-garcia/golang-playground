@@ -1,4 +1,4 @@
-package config
+package configuration
 
 import (
 	"fmt"
@@ -6,9 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var AppConfiguration Configuration
-
-// Configuration is a struct to bundle configurations for the application.
+// Configuration struct holds the application configuration.
 type Configuration struct {
 	Server struct {
 		Port int
@@ -27,15 +25,16 @@ type Configuration struct {
 
 // Load is a function to load the configuration from a file.
 // It uses viper to read the configuration file and unmarshal it into the Configuration struct.
-func Load(environment string) error {
+func Load(environment string) (*Configuration, error) {
 	path := fmt.Sprintf("%s/%s.yaml", GetConfigsPath(), environment)
 	viper.SetConfigFile(path)
 	viper.SetConfigType("yaml")
 	if err := viper.ReadInConfig(); err != nil {
-		return fmt.Errorf("read config: %w", err)
+		return nil, fmt.Errorf("read config: %w", err)
 	}
-	if err := viper.Unmarshal(&AppConfiguration); err != nil {
-		return fmt.Errorf("unmarshal config: %w", err)
+	var config Configuration
+	if err := viper.Unmarshal(&config); err != nil {
+		return nil, fmt.Errorf("unmarshal config: %w", err)
 	}
-	return nil
+	return &config, nil
 }
