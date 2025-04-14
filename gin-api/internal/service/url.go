@@ -20,7 +20,7 @@ type UrlService interface {
 	// GenerateShortCode generates a short code
 	GenerateShortCode() string
 	// GetUrlByShort retrieves a URL by its short code
-	GetUrlByShort(short string) (*model.Url, error)
+	GetUrlByShortCode(short string) (*model.Url, error)
 }
 
 type urlService struct {
@@ -68,9 +68,13 @@ func (s *urlService) CreateUrl(original string) (*model.Url, error) {
 	return url, nil
 }
 
-func (s *urlService) GetUrlByShort(shortCode string) (*model.Url, error) {
-	url, err := s.repo.GetUrlByShort(shortCode)
+func (s *urlService) GetUrlByShortCode(shortCode string) (*model.Url, error) {
+	url, err := s.repo.GetUrlByShortCode(shortCode)
 	if err != nil {
+		return nil, err
+	}
+	url.Usages += 1
+	if err := s.repo.Update(url); err != nil {
 		return nil, err
 	}
 	return url, nil

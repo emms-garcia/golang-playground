@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TestConfigureDB tests the database connection is established
 func TestConfigureDB(t *testing.T) {
 	config, err := configuration.Load(configuration.Test)
 	if err != nil {

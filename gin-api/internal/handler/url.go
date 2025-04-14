@@ -46,7 +46,7 @@ func (h *urlHandler) Shorten(c *gin.Context) {
 // Redirect is a handler function to redirect to the original URL
 func (h *urlHandler) Redirect(c *gin.Context) {
 	shortCode := c.Param("short")
-	url, err := h.service.GetUrlByShort(shortCode)
+	url, err := h.service.GetUrlByShortCode(shortCode)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "URL not found"})
 		return

@@ -36,7 +36,7 @@ func (s *todoService) CreateTodo(message string) (*model.Todo, error) {
 // UpdateTodo is a method to update an existing todo
 // It takes an ID and a message as input and returns the updated Todo or an error
 func (s *todoService) UpdateTodo(id int, message string) (*model.Todo, error) {
-	todo, err := s.repo.GetTodoById(id)
+	todo, err := s.repo.Get(id)
 	if err != nil {
 		return nil, err
 	}
@@ -50,21 +50,13 @@ func (s *todoService) UpdateTodo(id int, message string) (*model.Todo, error) {
 // GetTodos is a method to get all todos
 // It returns a slice of Todos or an error
 func (s *todoService) GetTodos() ([]*model.Todo, error) {
-	todos, err := s.repo.GetTodos()
-	if err != nil {
-		return nil, err
-	}
-	return todos, nil
+	return s.repo.All()
 }
 
 // GetTodo is a method to get a todo by ID
 // It takes an ID as input and returns the Todo or an error
 func (s *todoService) GetTodo(id int) (*model.Todo, error) {
-	todo, err := s.repo.GetTodoById(id)
-	if err != nil {
-		return nil, err
-	}
-	return todo, nil
+	return s.repo.Get(id)
 }
 
 // DeleteTodo is a method to delete a todo by ID
