@@ -7,8 +7,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "todo-cli",
-	Short: "A simple CLI to manage your todo list",
-	Long:  "todo-cli is a simple command line interface to manage your todo list.",
+	Short: "A simple CLI to manage your to-do list",
 	CompletionOptions: cobra.CompletionOptions{
 		// to disable the default command "completion"
 		DisableDefaultCmd: true,

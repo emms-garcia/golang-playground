@@ -9,7 +9,7 @@ import (
 
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all tasks",
+	Short: "List all tasks on the to-do list",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		db, err := db.GetDatabase()
 		if err != nil {

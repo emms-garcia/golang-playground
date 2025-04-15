@@ -9,7 +9,7 @@ import (
 
 var addCmd = &cobra.Command{
 	Use:   "add [task]",
-	Short: "Add a new task",
+	Short: "Add a new task to the to-do list",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		db, err := db.GetDatabase()

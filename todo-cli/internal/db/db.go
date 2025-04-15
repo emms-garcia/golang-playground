@@ -22,6 +22,7 @@ func ensureDatabasePathExists() error {
 	return nil
 }
 
+// GetDatabase returns a pointer to the database connection.
 func GetDatabase() (*sql.DB, error) {
 	dbPath := getDatabasePath()
 	db, err := sql.Open("sqlite3", dbPath)
@@ -31,6 +32,7 @@ func GetDatabase() (*sql.DB, error) {
 	return db, nil
 }
 
+// InitDatabase initializes the database connection and creates the database file if it doesn't exist.
 func InitDatabase() (*sql.DB, error) {
 	if err := ensureDatabasePathExists(); err != nil {
 		return nil, err
