@@ -1,6 +1,6 @@
 # golang-playground
 
-Portfolio with several projects using the [Go Programming Language](https://go.dev/).
+Portfolio with projects using the [Go Programming Language](https://go.dev/).
 
 ## gin-api
 
