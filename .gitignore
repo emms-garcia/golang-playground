@@ -26,3 +26,6 @@ go.work.sum
 
 # air tmp folder
 tmp
+
+# gin-api artifacts
+gin-api/url

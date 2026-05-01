@@ -10,5 +10,6 @@ func Load(env string) (*zap.Logger, error) {
 	if env == configuration.Production {
 		return zap.NewProduction()
 	}
+
 	return zap.NewDevelopment()
 }

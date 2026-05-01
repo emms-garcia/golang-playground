@@ -11,7 +11,7 @@ import (
 
 // Setup is a function to set up the routes of the API
 func Setup(app *application.Application) *gin.Engine {
-	engine := gin.Default()
+	engine := gin.New()
 	engine.SetTrustedProxies(nil)
 	engine.Use(gin.Recovery())
 	engine.Use(middleware.LogRequestMiddleware(app.Logger))

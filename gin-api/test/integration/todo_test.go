@@ -10,9 +10,7 @@ import (
 
 // TestAddHandler tests the GET /todos endpoint
 func TestAddHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	response := app.Request("POST", "/todos", "{\"message\": \"test\"}")
 	assert.Equal(t, http.StatusCreated, response.Code)
 	assert.Equal(t, "{\"id\":1,\"message\":\"test\"}", response.Body.String())
@@ -20,12 +18,9 @@ func TestAddHandler(t *testing.T) {
 
 // TestUpdateHandler tests the PUT /todos/:id endpoint
 func TestUpdateHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	result := app.DB.Create(&model.Todo{Message: "test"})
-	if result.Error != nil {
-		t.Error("failed to create todo")
+	if !assert.NoError(t, result.Error) {
 		return
 	}
 
@@ -36,12 +31,9 @@ func TestUpdateHandler(t *testing.T) {
 
 // TestDetailHandler tests the GET /todos/:id endpoint
 func TestDetailHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	result := app.DB.Create(&model.Todo{Message: "test"})
-	if result.Error != nil {
-		t.Error("failed to create todo")
+	if !assert.NoError(t, result.Error) {
 		return
 	}
 
@@ -52,13 +44,14 @@ func TestDetailHandler(t *testing.T) {
 
 // TestListHandler tests the GET /todos endpoint
 func TestListHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	result1 := app.DB.Create(&model.Todo{Message: "test1"})
 	result2 := app.DB.Create(&model.Todo{Message: "test2"})
-	if result1.Error != nil || result2.Error != nil {
-		t.Error("failed to create todos")
+	if !assert.NoError(t, result1.Error) {
+		return
+	}
+
+	if !assert.NoError(t, result2.Error) {
 		return
 	}
 
@@ -69,15 +62,20 @@ func TestListHandler(t *testing.T) {
 
 // TestDeleteHandler tests the DELETE /todos/:id endpoint
 func TestDeleteHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	result1 := app.DB.Create(&model.Todo{Message: "test"})
-	if result1.Error != nil {
-		t.Error("failed to create todo")
+	if !assert.NoError(t, result1.Error) {
 		return
 	}
 
 	response := app.Request("DELETE", "/todos/1", "")
 	assert.Equal(t, http.StatusNoContent, response.Code)
+	assert.Empty(t, response.Body.String())
+}
+
+func TestTodoHandlerRejectsInvalidID(t *testing.T) {
+	app := NewTestApplication(t)
+	response := app.Request("GET", "/todos/abc", "")
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+	assert.Equal(t, "{\"error\":\"invalid todo id\"}", response.Body.String())
 }

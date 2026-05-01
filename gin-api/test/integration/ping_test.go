@@ -9,9 +9,7 @@ import (
 
 // TestPingHandler tests the GET /ping endpoint
 func TestPingHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	response := app.Request("GET", "/ping", "")
 	assert.Equal(t, http.StatusOK, response.Code)
 	assert.Equal(t, "{\"message\":\"pong\"}", response.Body.String())

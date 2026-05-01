@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"math/big"
 
@@ -14,31 +15,21 @@ var base62 = big.NewInt(62)
 
 const base62Charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-type UrlService interface {
-	// CreateUrl creates a new URL
-	CreateUrl(original string) (*model.Url, error)
-	// GenerateShortCode generates a short code
-	GenerateShortCode() string
-	// GetUrlByShort retrieves a URL by its short code
-	GetUrlByShortCode(short string) (*model.Url, error)
+type UrlService struct {
+	repo *repository.UrlRepository
 }
 
-type urlService struct {
-	repo repository.UrlRepository
+func NewUrlService(repo *repository.UrlRepository) *UrlService {
+	return &UrlService{repo: repo}
 }
 
-func NewUrlService(repo repository.UrlRepository) UrlService {
-	return &urlService{repo: repo}
-}
-
-func (s *urlService) GenerateShortCode() string {
+func (s *UrlService) GenerateShortCode() string {
 	u := uuid.New()
 	uInt := new(big.Int).SetBytes(u[:])
 
 	var encoded []byte
 	zero := big.NewInt(0)
 	mod := new(big.Int)
-
 	for uInt.Cmp(zero) > 0 {
 		uInt.DivMod(uInt, base62, mod)
 		index := mod.Int64()
@@ -59,23 +50,26 @@ func (s *urlService) GenerateShortCode() string {
 	return string(encoded)
 }
 
-func (s *urlService) CreateUrl(original string) (*model.Url, error) {
+func (s *UrlService) CreateUrl(ctx context.Context, original string) (*model.Url, error) {
 	shortCode := s.GenerateShortCode()
-	url, err := s.repo.CreateUrl(original, shortCode)
+	url, err := s.repo.CreateUrl(ctx, original, shortCode)
 	if err != nil {
 		return nil, err
 	}
+
 	return url, nil
 }
 
-func (s *urlService) GetUrlByShortCode(shortCode string) (*model.Url, error) {
-	url, err := s.repo.GetUrlByShortCode(shortCode)
+func (s *UrlService) GetUrlByShortCode(ctx context.Context, shortCode string) (*model.Url, error) {
+	url, err := s.repo.GetUrlByShortCode(ctx, shortCode)
 	if err != nil {
 		return nil, err
 	}
+
 	url.Usages += 1
-	if err := s.repo.Update(url); err != nil {
+	if err := s.repo.Update(ctx, url); err != nil {
 		return nil, err
 	}
+
 	return url, nil
 }

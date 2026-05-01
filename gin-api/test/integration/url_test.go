@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -9,18 +10,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestShortenHandler tests the GET /u/shorten endpoint
+// TestShortenHandler tests the POST /u/shorten endpoint
 func TestShortenHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	longUrl := "https://github.com"
 	response := app.Request("POST", "/u/shorten", fmt.Sprintf("{\"url\": \"%s\"}", longUrl))
 	assert.Equal(t, http.StatusOK, response.Code)
-
-	url, err := repository.NewUrlRepository(app.DB).GetUrlByOriginal(longUrl)
-	if err != nil {
-		t.Error("failed to retrieve url")
+	url, err := repository.NewUrlRepository(app.DB).GetUrlByOriginal(context.Background(), longUrl)
+	if !assert.NoError(t, err) {
 		return
 	}
 
@@ -30,21 +27,17 @@ func TestShortenHandler(t *testing.T) {
 
 // TestRedirectHandler tests the GET /u/:short endpoint
 func TestRedirectHandler(t *testing.T) {
-	app := NewTestApplication()
-	defer app.Teardown()
-
+	app := NewTestApplication(t)
 	longUrl := "https://github.com"
 	repo := repository.NewUrlRepository(app.DB)
-	url, err := repo.CreateUrl(longUrl, "abc123")
-	if err != nil {
-		t.Error("failed to create url")
+	url, err := repo.CreateUrl(context.Background(), longUrl, "abc123")
+	if !assert.NoError(t, err) {
 		return
 	}
 
 	response := app.Request("GET", "/u/"+url.ShortCode, "")
-	url, err = repo.Get(url.ID)
-	if err != nil {
-		t.Error("failed to retrieve url")
+	url, err = repo.Get(context.Background(), url.ID)
+	if !assert.NoError(t, err) {
 		return
 	}
 
