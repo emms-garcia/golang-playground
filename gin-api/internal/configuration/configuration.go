@@ -18,6 +18,7 @@ type Configuration struct {
 		User     string
 		Password string
 		Name     string
+		SSLMode  string `mapstructure:"sslmode"`
 	}
 
 	Environment string

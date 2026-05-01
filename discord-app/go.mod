@@ -1,6 +1,6 @@
 module github.com/emms-garcia/golang-playground/discord-app
 
-go 1.24
+go 1.26.2
 
 require (
 	github.com/bwmarrin/discordgo v0.28.1

@@ -11,7 +11,8 @@ services:
       # Set to "release" to avoid spamming the console.
       GIN_MODE: release
     depends_on:
-      - testdb
+      testdb:
+        condition: service_healthy
     volumes:
       - ./:/go/src/app
 
@@ -24,3 +25,9 @@ services:
       POSTGRES_PASSWORD: 123456
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
